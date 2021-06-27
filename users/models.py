@@ -12,6 +12,7 @@ class Profile(models.Model):
     photo = models.ImageField(upload_to='users/pictures', blank=True, null=True)
     date_of_birth = models.DateField(blank=True, null=True)
     date_modified = models.DateTimeField(auto_now=True)
+    coderegistro = models.CharField(max_length=12, default='000000000000')
     
     def __str__(self) -> str:
         return self.user.username

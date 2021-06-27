@@ -43,3 +43,15 @@ class LoginForm(forms.Form):
     # class Meta:
     #     model = User
     #     fields = ('password',)
+
+class RecoverPasswordForm(forms.ModelForm):
+    """
+    """
+    class Meta:
+        model = User
+        fields = ('email',)
+
+class RecoverPasswordFormConfirm(forms.Form):
+    
+    email = forms.CharField(label='Email')
+    recovery = forms.CharField(label='Your Code')

@@ -7,4 +7,7 @@
         {{ user_form.as_p }}
         <button type="submit">Log-in</button>
     </form>
+    <br>
+    <h1>Forget your password?</h2>
+    Here.. <a class="btn btn-outline-light me-2" href="{% url "users:edit" %}">Edit Profile</a>
 {% endblock content %}
