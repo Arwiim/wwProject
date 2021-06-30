@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 
 # Create your models here.
@@ -12,7 +13,12 @@ class Profile(models.Model):
     photo = models.ImageField(upload_to='users/pictures', blank=True, null=True)
     date_of_birth = models.DateField(blank=True, null=True)
     date_modified = models.DateTimeField(auto_now=True)
-    coderegistro = models.CharField(max_length=12, default='000000000000')
     
     def __str__(self) -> str:
         return self.user.username
+
+class User(AbstractUser):
+    is_verified = models.BooleanField(default=False)
+
+    def __str__(self) -> str:
+        return self.email

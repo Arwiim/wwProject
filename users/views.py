@@ -1,14 +1,16 @@
 from django import http
 from django.http.response import HttpResponse
 from django.shortcuts import render
-from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.core.mail import send_mail
-from django.forms import ValidationError
+from django.utils.encoding import force_bytes, force_str, force_text, DjangoUnicodeDecodeError
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.auth import get_user_model
+
+from .models import User
 #
 from .decorators import password_code
 
@@ -37,6 +39,13 @@ def register(request):
         user_form = UserRegistration()
     return render(request, 'account/register.html', context={'user_form': user_form})
 
+
+def activate_user(request, uidb64, token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except Exception as e:
+        user = None
 
 @login_required
 def edit_profile(request):
@@ -67,8 +76,6 @@ def edit_profile(request):
 def user_login(request):
     """
     """
-    if request.user.is_authenticated:
-        return HttpResponseRedirect('/')
     if request.method == 'POST':
         user_form = LoginForm(request.POST)
         if user_form.is_valid():
@@ -76,8 +83,9 @@ def user_login(request):
             user = authenticate(request,
                                 username=cd['username'],
                                 password=cd['password'])
-            login(request, user)
-            return HttpResponseRedirect('/')
+            if user is not None:
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+                return HttpResponseRedirect('/')
     else:
         user_form = LoginForm()
     return render(request, 'account/login.html', {'user_form': user_form})
