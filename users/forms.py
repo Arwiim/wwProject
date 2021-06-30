@@ -1,8 +1,7 @@
 from django import forms
 from django.forms import models
-from django.contrib.auth.models import User
 from django.forms.widgets import PasswordInput
-from .models import Profile
+from .models import Profile, User
 
 class UserRegistration(forms.ModelForm):
     """Form for user registration
@@ -43,15 +42,23 @@ class ProfileEditForm(forms.ModelForm):
         fields = ('website','photo', 'date_of_birth')
 
 
-class LoginForm(forms.Form):
+class LoginForm(forms.ModelForm):
     """
     """
     username = forms.CharField(label='Email or User')
-    password = forms.CharField(label='Password',
-                               widget=PasswordInput)
-    # class Meta:
-    #     model = User
-    #     fields = ('password',)
+
+    class Meta:
+        model = User
+        fields = ('password',)
+        
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if email:
+            if not User.objects.filter(email=email).exists():
+                raise forms.ValidationError('No valid email')
+            else:
+                pass
+        return email
 
 class RecoverPasswordForm(forms.ModelForm):
     """
