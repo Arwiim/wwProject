@@ -47,7 +47,6 @@ def activate_user(request, uidb64, token):
 
 @login_required
 def edit_profile(request):
-    #Edit Profile
     if request.method == 'POST':
         user_form = UserEditForm(instance=request.user,
                                      data=request.POST)
