@@ -1,4 +1,3 @@
-from django import http
 from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
@@ -8,7 +7,6 @@ from django.http import HttpResponseRedirect
 from django.core.mail import send_mail
 from django.utils.encoding import force_bytes, force_str, force_text, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.contrib.auth import get_user_model
 
 from .models import User
 #
