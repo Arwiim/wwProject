@@ -1,6 +1,4 @@
 from django import forms
-from django.forms import models
-from django.forms.widgets import PasswordInput
 from .models import Profile, User
 
 class UserRegistration(forms.ModelForm):
