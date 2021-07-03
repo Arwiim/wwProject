@@ -1,4 +1,5 @@
-from django.http.response import HttpResponse
+"""Module views for users
+"""
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -6,22 +7,26 @@ from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.core.mail import send_mail, EmailMessage
+from django.core.mail import send_mail
 from django.template.loader import render_to_string
-from django.utils.encoding import force_bytes, force_str, force_text, DjangoUnicodeDecodeError
+from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
-from .models import User
 from .utils import generate_token
-#
-
-
-from .models import Profile
+from .models import Profile, User
 from .forms import (UserRegistration, ProfileEditForm, UserEditForm,
-                    LoginForm, RecoverPasswordForm, RecoverPasswordFormConfirm)
+                    LoginForm, RecoverPasswordForm)
+
+
+def main(request):
+    """Main view
+    """
+    return render(request, 'base.html')
 
 
 def register(request):
+    """Register view for user
+    """
     if request.method == 'POST':
         user_form = UserRegistration(request.POST)
         if user_form.is_valid():
@@ -31,10 +36,7 @@ def register(request):
             new_user.set_password(user_form.cleaned_data['password'])
             new_user.save()
             Profile.objects.create(user=new_user)
-            user_log = authenticate(username = user_form.cleaned_data['username'],
-                                    password=user_form.cleaned_data['password'])
-            #login(request, user_log)
-            # Email validator
+            # Send email for verification
             send_email_activation(new_user, request)
             messages.add_message(request, messages.SUCCESS, 'We sent email verify')
             return HttpResponseRedirect('/')
@@ -44,6 +46,8 @@ def register(request):
 
 
 def send_email_activation(user, request):
+    """Function to send email validator after register
+    """
     current_site = get_current_site(request)
     email_subject = 'Activate your account'
     email_body = render_to_string('account/activate.html', {
@@ -61,6 +65,8 @@ def send_email_activation(user, request):
 
 @login_required
 def edit_profile(request):
+    """View for porfile edit
+    """
     if request.method == 'POST':
         user_form = UserEditForm(instance=request.user,
                                      data=request.POST)
@@ -77,7 +83,7 @@ def edit_profile(request):
     else:
         user_form = UserEditForm(instance=request.user)
         profile_form = ProfileEditForm(instance=request.user.profile)
-        
+
     return render(request,
                   'account/edit_profile.html',
                   {'user_form': user_form,
@@ -85,15 +91,15 @@ def edit_profile(request):
 
 
 def user_login(request):
-    """
+    """View for loguin user
     """
     if request.method == 'POST':
         user_form = LoginForm(request.POST)
         if user_form.is_valid():
-            cd = user_form.cleaned_data
+            clean_data = user_form.cleaned_data
             user = authenticate(request,
-                                username=cd['username'],
-                                password=cd['password'])
+                                username=clean_data['username'],
+                                password=clean_data['password'])
             if user and not user.is_verified:
                 return HttpResponseRedirect('/')
             if user is not None:
@@ -106,65 +112,71 @@ def user_login(request):
 
 @login_required
 def user_logout(request):
+    """View for user logout
+    """
     logout(request)
     return HttpResponseRedirect('/')
 
 
 def user_recovery_password(request):
-    active = False
-    return []
-    # if request.method == 'POST':
-    #     form = RecoverPasswordForm(request.POST)
-    #     #user = cd['']
-    #     #if user is not None:
-    #         #if user.is_active():
-    #     if form.is_valid():
-    #         cd = form.cleaned_data
-    #         try:
-    #             user = User.objects.get(email=cd['email'])
-    #             HttpResponse('Email Sended')
-    #             send_mail('Recovery Password WW',
-    #                   f'Here is your code, {recovery}',
-    #                   'arwiimm@gmail.com',
-    #                   [cd['email']],
-    #                   fail_silently=False)
-    #             return HttpResponseRedirect('recover-confirm')
-    #         except:
-    #             #if not user.is_active():
-    #             HttpResponse('No sr')
-    #             return HttpResponseRedirect('/')
-    #             #print(user)
-    # else:
-    #     form = RecoverPasswordForm()
-    # return render(request, 'account/password_reset.html', {'form_recover': form})    
-                   
-def user_password_confirm(request):
+    """View for recover password
+    """
     if request.method == 'POST':
-        form = RecoverPasswordFormConfirm(request.POST)
+        form = RecoverPasswordForm(request.POST)
+        #user = clean_data['']
+        #if user is not None:
+            #if user.is_active():
         if form.is_valid():
-            cd = form.cleaned_data
-            user = User.objects.get(email=cd['email'])
-            if user.profile.coderegistro == cd['recovery']:
+            clean_data = form.cleaned_data
+            try:
+                user = User.objects.get(email=clean_data['email'])
+                HttpResponse('Email Sended')
+                send_mail('Recovery Password WW',
+                      f'Here is your code, {recovery}',
+                      'arwiimm@gmail.com',
+                      [clean_data['email']],
+                      fail_silently=False)
+                return HttpResponseRedirect('recover-confirm')
+            except:
+                #if not user.is_active():
+                HttpResponse('No sr')
                 return HttpResponseRedirect('/')
+                #print(user)
     else:
-        form = RecoverPasswordFormConfirm()
-    return render(request, 'account/password_confirm.html', {'form': form})
-    
-def main(request):
-    return render(request, 'base.html')
+        form = RecoverPasswordForm()
+    return render(request, 'account/password_reset.html', {'form_recover': form})
 
-def activate_user(request, uidb64, token):
+def reocovery_email_validate(request, uidb64, token):
+    """View for send email validator for password reset
+    """
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
-
-    except Exception as e:
+    except Exception:
         user = None
 
     if user and generate_token.check_token(user, token):
         user.is_verified = True
         user.save()
+        messages.add_message(request, messages.SUCCESS,
+                             'Email verified, you can now login')
+        return redirect(reverse('users:login'))
 
+    return render(request, 'account/activate-failed.html', {"user": user})
+
+
+def activate_user(request, uidb64, token):
+    """View for activate a user if the token is the same as the validation
+    """
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except Exception:
+        user = None
+
+    if user and generate_token.check_token(user, token):
+        user.is_verified = True
+        user.save()
         messages.add_message(request, messages.SUCCESS,
                              'Email verified, you can now login')
         return redirect(reverse('users:login'))
