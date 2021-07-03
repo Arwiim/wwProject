@@ -118,53 +118,6 @@ def user_logout(request):
     return HttpResponseRedirect('/')
 
 
-def user_recovery_password(request):
-    """View for recover password
-    """
-    if request.method == 'POST':
-        form = RecoverPasswordForm(request.POST)
-        #user = clean_data['']
-        #if user is not None:
-            #if user.is_active():
-        if form.is_valid():
-            clean_data = form.cleaned_data
-            try:
-                user = User.objects.get(email=clean_data['email'])
-                HttpResponse('Email Sended')
-                send_mail('Recovery Password WW',
-                      f'Here is your code, {recovery}',
-                      'arwiimm@gmail.com',
-                      [clean_data['email']],
-                      fail_silently=False)
-                return HttpResponseRedirect('recover-confirm')
-            except:
-                #if not user.is_active():
-                HttpResponse('No sr')
-                return HttpResponseRedirect('/')
-                #print(user)
-    else:
-        form = RecoverPasswordForm()
-    return render(request, 'account/password_reset.html', {'form_recover': form})
-
-def reocovery_email_validate(request, uidb64, token):
-    """View for send email validator for password reset
-    """
-    try:
-        uid = force_text(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
-    except Exception:
-        user = None
-
-    if user and generate_token.check_token(user, token):
-        user.is_verified = True
-        user.save()
-        messages.add_message(request, messages.SUCCESS,
-                             'Email verified, you can now login')
-        return redirect(reverse('users:login'))
-
-    return render(request, 'account/activate-failed.html', {"user": user})
-
-
 def activate_user(request, uidb64, token):
     """View for activate a user if the token is the same as the validation
     """
