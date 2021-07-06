@@ -1,5 +1,10 @@
-from django import forms
+from django import db, forms
+from django.forms import modelformset_factory
+from django.forms.widgets import Widget
 from .models import Profile, User
+from django.contrib import messages
+
+#from django.contrib.auth.models import User as Us
 
 class UserRegistration(forms.ModelForm):
     """Form for user registration
@@ -40,32 +45,9 @@ class ProfileEditForm(forms.ModelForm):
         fields = ('website','photo', 'date_of_birth')
 
 
-class LoginForm(forms.ModelForm):
+class LoginForm(forms.Form):
     """
     """
     username = forms.CharField(label='Email or User')
-
-    class Meta:
-        model = User
-        fields = ('password',)
-        
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        if email:
-            if not User.objects.filter(email=email).exists():
-                raise forms.ValidationError('No valid email')
-            else:
-                pass
-        return email
-
-class RecoverPasswordForm(forms.ModelForm):
-    """
-    """
-    class Meta:
-        model = User
-        fields = ('email',)
-
-class RecoverPasswordFormConfirm(forms.Form):
-    
-    email = forms.CharField(label='Email')
-    recovery = forms.CharField(label='Your Code')
+    password = forms.CharField(label='Password',
+                               widget=forms.PasswordInput)
