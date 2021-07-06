@@ -1,7 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Log in !! </h1>
+    <h1>Log-in</h1>
+        <p>Please, use the following form to log-in. If you don't have an account <a href="{% url "users:register" %}">register here</a></p>
+  {% if messages %}
+    <ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+    </ul>
+{% endif %}
     <form action="" method="post">
         {% csrf_token %}
         {{ user_form.as_p }}
