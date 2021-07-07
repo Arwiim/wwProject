@@ -1,10 +1,5 @@
 from django import db, forms
-from django.forms import modelformset_factory
-from django.forms.widgets import Widget
 from .models import Profile, User
-from django.contrib import messages
-
-#from django.contrib.auth.models import User as Us
 
 class UserRegistration(forms.ModelForm):
     """Form for user registration
