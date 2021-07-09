@@ -11,10 +11,11 @@
     <title>Document</title>
     {% endblock%}
 </head>
-<header>{% include 'headers.html' %}</header>
 <body>
+    <header>{% include 'headers.html' %}</header>
+    <div class="container">
     {% block content %}
-    
     {% endblock %}
+    </div>
 </body>
 </html>

@@ -1,5 +1,6 @@
 """Module views for users
 """
+from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -103,10 +104,10 @@ def user_login(request):
             if user:
                 if user.is_verified:
                     login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-                    return render(request, 'account/register_done.html')
+                    return HttpResponseRedirect('/')
                 messages.error(request, 'Activate your email')
             else:
-                messages.error(request, 'Invalid login')
+                messages.error(request, 'Invalid Credentials')
 
     user_form = LoginForm()
     return render(request, 'account/login.html', {'user_form': user_form})
