@@ -1,22 +1,42 @@
 {% extends "base.html" %}
-
 {% block content %}
-    <h1>Log-in</h1>
-        <p>Please, use the following form to log-in. If you don't have an account <a href="{% url "users:register" %}">register here</a></p>
-  {% if messages %}
-    <ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-    </ul>
-{% endif %}
-    <form action="" method="post">
-        {% csrf_token %}
-        {{ user_form.as_p }}
-        <button type="submit">Log-in</button>
-    </form>
-    <br>
-    <h1>Forget your password?</h2>
-    <p>Here</p>
-    <p><a href="{% url "users:password_reset" %}">Forgotten your password?</a></p>
+<div class="row justify-content-center mt-5">
+   <div class="col-md-5">
+      <h2>Login</h2>
+   </div>
+</div>
+<div class="row justify-content-center mt-5">
+   <div class="col-md-5">
+      {% if messages %}
+      <div class="alert alert-danger" role="alert">
+         {% for message in messages %}
+         <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+         {% endfor %}
+      </div>
+      {% endif %}
+      <form method="POST">
+         {% csrf_token %}
+         <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" name="username" class="form-control" id="username" required
+                oninvalid="this.setCustomValidity('Enter Username/Email Here')"
+                oninput="this.setCustomValidity('')"/>
+         </div>
+         <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" class="form-control" id="password" required
+                oninvalid="this.setCustomValidity('Enter Password Here')"
+                oninput="this.setCustomValidity('')"/>
+         </div>
+         <button type="submit" class="btn btn-primary">Login</button>
+      </form>
+      <hr>
+      <div class="text-center">
+         Forget password? <a href="{% url 'users:register' %}">Recover password here</a>
+      </div>
+      <div class="text-center">
+         Need an account? <a href="{% url 'users:register' %}">Sign Up here</a>
+      </div>
+   </div>
+</div>
 {% endblock content %}
