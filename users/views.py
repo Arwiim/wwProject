@@ -39,8 +39,7 @@ def register(request):
             Profile.objects.create(user=new_user)
             # Send email for verification
             send_email_activation(new_user, request)
-            messages.add_message(request, messages.SUCCESS, 'We sent email verify')
-            return HttpResponseRedirect('/')
+            return render(request, 'account/activate_email.html')
     else:
         user_form = UserRegistration()
     return render(request, 'account/register.html', context={'user_form': user_form})
