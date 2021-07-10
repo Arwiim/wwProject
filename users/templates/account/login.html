@@ -19,38 +19,44 @@
          <div class="form-group">
             <label for="username">Username</label>
             <input type="text" name="username" class="form-control" id="username" required
-                oninvalid="this.setCustomValidity('Enter Username/Email Here')"
-                oninput="this.setCustomValidity('')"/>
+               oninvalid="this.setCustomValidity('Enter Username/Email Here')"
+               oninput="this.setCustomValidity('')"/>
          </div>
          <div class="form-group">
             <label for="password">Password</label>
             <input type="password" name="password" class="form-control" id="password" required
-                oninvalid="this.setCustomValidity('Enter Password Here')"
-                oninput="this.setCustomValidity('')"/>
+               oninvalid="this.setCustomValidity('Enter Password Here')"
+               oninput="this.setCustomValidity('')"/>
          </div>
          <br>
          <button type="submit" class="btn btn-primary">Login</button>
       </form>
+      <br>
       <div class="row">
-         <div class="col-md-8 mx-auto social-container my-2 order-md-1">
-             <button class="btn btn-danger  mb-2">
-                 <a href="#">Login with Instagram</a>
-             </button>
-             <button class="btn btn-primary mb-2">
-               <a href="{% url 'social:begin' 'facebook' %}">Login with Facebook</a>
-             </button>
-             <button class="btn btn-info mb-2">
-                 <a href="#">Login with LinkedIn</a>
-             </button>
+         <div class="text-center">
+            <button type="button" class="btn btn-outline-dark mb-2">
+            <a href="{% url 'social:begin' 'facebook' %}">Login with Facebook</a>
+            </button>
          </div>
-     </div>
-     </div>
+         <div class="text-center">
+            <button type="button" class="btn btn-outline-dark mb-2">
+            <a href="#">Login with Instagram</a>
+            </button>
+         </div>
+         <div class="text-center">
+            <button type="button" class="btn btn-outline-dark mb-2">
+            <a href="#">Login with Instagram</a>
+            </button>
+         </div>
+      </div>
+      <br>
       <div class="text-center">
          Need an account? <a href="{% url 'users:register' %}">Sign Up here</a>
       </div>
       <div class="text-center">
          Forget password? <a href="{% url 'users:register' %}">Recover password here</a>
       </div>
+      <br>
    </div>
 </div>
 {% endblock content %}
