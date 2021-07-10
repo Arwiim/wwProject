@@ -1,24 +1,19 @@
 from django import db, forms
 from django.core.exceptions import ValidationError
+from django.forms import fields
 from .models import Profile, User
 
-def email_validation(email):
-    if not email:
-        ValidationError('Put email!')
-    ValidationError('Jesus')
-class UserRegistration(forms.Form):
+class UserRegistration(forms.ModelForm):
     """Form for user registration
     """
     password = forms.CharField(label='Password',
                                widget=forms.PasswordInput)
     password2 = forms.CharField(label='Repeat Password',
                                 widget=forms.PasswordInput)
-    username = forms.CharField(label='Repeat Password',
-                                widget=forms.PasswordInput)
-    email = forms.EmailField(required=True,
-                             max_length=70,
-                             label='Email',
-                             validators=[email_validation,])
+
+    class Meta:
+        model = User
+        fields = ('username', 'email',)
         
     def clean_password2(self):
         super(UserRegistration, self).clean()
