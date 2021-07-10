@@ -1,4 +1,6 @@
 from django import db, forms
+from django.core.exceptions import ValidationError
+from django.forms import fields
 from .models import Profile, User
 
 class UserRegistration(forms.ModelForm):
@@ -8,18 +10,20 @@ class UserRegistration(forms.ModelForm):
                                widget=forms.PasswordInput)
     password2 = forms.CharField(label='Repeat Password',
                                 widget=forms.PasswordInput)
-    
+
     class Meta:
         model = User
-        fields = ('username', 'email')
+        fields = ('username', 'email',)
         
     def clean_password2(self):
+        super(UserRegistration, self).clean()
         cd = self.cleaned_data
         if cd['password'] != cd['password2']:
             raise forms.ValidationError('password not match')
         return cd['password2']
     
     def clean_email(self):
+        super(UserRegistration, self).clean()
         email = self.cleaned_data.get('email')
         if email:
             if User.objects.filter(email=email).exists():
