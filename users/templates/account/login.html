@@ -31,12 +31,25 @@
          <br>
          <button type="submit" class="btn btn-primary">Login</button>
       </form>
-      <hr>
-      <div class="text-center">
-         Forget password? <a href="{% url 'users:register' %}">Recover password here</a>
-      </div>
+      <div class="row">
+         <div class="col-md-8 mx-auto social-container my-2 order-md-1">
+             <button class="btn btn-danger  mb-2">
+                 <a href="#">Login with Instagram</a>
+             </button>
+             <button class="btn btn-primary mb-2">
+               <a href="{% url 'social:begin' 'facebook' %}">Login with Facebook</a>
+             </button>
+             <button class="btn btn-info mb-2">
+                 <a href="#">Login with LinkedIn</a>
+             </button>
+         </div>
+     </div>
+     </div>
       <div class="text-center">
          Need an account? <a href="{% url 'users:register' %}">Sign Up here</a>
+      </div>
+      <div class="text-center">
+         Forget password? <a href="{% url 'users:register' %}">Recover password here</a>
       </div>
    </div>
 </div>
