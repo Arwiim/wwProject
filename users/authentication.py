@@ -1,6 +1,5 @@
 from .models import User
 
-
 class EmailAuthBackend(object):
     """
     Authenticate using e-email address
