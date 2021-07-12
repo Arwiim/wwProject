@@ -136,6 +136,10 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
   'fields': 'id, name, email, age_range'
 }
 
+SOCIAL_AUTH_GOOGLE_PROFILE_EXTRA_PARAMS = {
+    'fields': 'id, name, email'
+}
+
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',
     'social_core.pipeline.social_auth.social_uid',
@@ -162,8 +166,11 @@ LOGIN_REDIRECT_URL = 'users:main'
 LOGOUT_URL = 'users:logout'
 LOGOUT_REDIRECT_URL = 'users:main'
 
-SOCIAL_AUTH_FACEBOOK_KEY = 324984535938838        # App ID
-SOCIAL_AUTH_FACEBOOK_SECRET = '749f0b4cc9450a57bf6359d813fc0cb1'  # App Secret
+SOCIAL_AUTH_FACEBOOK_KEY = 324984535938838
+SOCIAL_AUTH_FACEBOOK_SECRET = '749f0b4cc9450a57bf6359d813fc0cb1'
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '1047909475276-ka6edl55nnj9gjikv9p476o650hnnbbb.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'IhGU-Oaz9caIaPKq_gwxo02c'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -174,5 +181,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.google.GoogleOAuth2',
     'users.authentication.EmailAuthBackend',
 ]
