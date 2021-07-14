@@ -1,20 +1,58 @@
 {% extends "base.html" %}
-
 {% block content %}
-<div>
-    <h1>Edit Profile >{{ request.user.username }}< </h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ user_form.as_p }}
-        {{ profile_form.as_p }}
-        <button type="submit">Register</button>
-    </form>
-    {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li> {{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+       <h2>Edit Profile!</h2>
+    </div>
+ </div>
+<div class="row justify-content-left mt-5">
+    <div class="col-md-5">
+       {% if messages %}
+       <div class="alert alert-danger" role="alert">
+          {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+          {% endfor %}
+       </div>
+       {% endif %}
+       <form method="POST">
+          {% csrf_token %}
+          <div class="form-group">
+             <label for="first_name">First Name</label>
+             <input type="text" name="first_name" class="form-control" value="{{ user_form.first_name.value }}" id="first_name" required
+                oninvalid="this.setCustomValidity('Enter Username/Email Here')"
+                oninput="this.setCustomValidity('')"/>
+          </div>
+          <div class="form-group">
+             <label for="last_name">Last Name</label>
+             <input type="text" name="last_name" class="form-control" id="first_name" value="{{ user_form.last_name.value }}">
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" name="email" class="form-control" value="{% if request.user.email %}{{ user_form.email.value }}{% endif %}" id="email" required
+               oninvalid="this.setCustomValidity('Enter Email Here')"
+               oninput="this.setCustomValidity('')"/>
+         </div>
+         <div class="form-group">
+            <label for="website">Website</label>
+            <input type="text" name="website" class="form-control" value="{% if request.user.profile.website %}{{ profile_form.website.value }}{% endif %}" id="website">
+         </div>
+         <div class="form-group">
+            <label for="date_of_birth">Date of birth</label>
+            <input type="text" name="date_of_birth" class="form-control" value="{% if request.user.profile.date_of_birth %}{{ profile_form.date_of_birth.value }}{% endif %}" id="date_of_birth">
+         </div>
+         <div class="form-group">
+            <label for="photo">Photo</label>
+            {% if request.user.profile.photo %}
+            <a href="{{ request.user.profile.photo.url }}">{{ request.user.profile.photo.url }}</a>
+            {% else %}
+            <input type="file" name="photo" class="form-control" value="{% if request.user.profile.photo %}{{ profile_form.photo.value }}{% endif %}" id="photo">
+            {% endif %}
+         </div>
+          <br>
+          <button type="submit" class="btn btn-primary">Login</button>
+       </form>
+    </div>
 </div>
+
 {% endblock content %}
+
