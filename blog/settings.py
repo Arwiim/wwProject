@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+
 from pathlib import Path
 import os
 
@@ -170,7 +171,8 @@ LOGOUT_REDIRECT_URL = 'users:main'
 SOCIAL_AUTH_FACEBOOK_KEY = 324984535938838        # App ID
 SOCIAL_AUTH_FACEBOOK_SECRET = '749f0b4cc9450a57bf6359d813fc0cb1'  # App Secret
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '1047909475276-ka6edl55nnj9gjikv9p476o650hnnbbb.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '1047909475276-ka6edl55nnj9gjikv9p476o650hnnbbb\
+    .apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'IhGU-Oaz9caIaPKq_gwxo02c'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
