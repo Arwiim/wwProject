@@ -133,13 +133,11 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
-  'locale': 'ru_RU',
-  'fields': 'id, name, email, age_range'
+    'locale': 'ru_RU',
+    'fields': 'id, name, email, age_range',
 }
 
-SOCIAL_AUTH_GOOGLE_PROFILE_EXTRA_PARAMS = {
-    'fields': 'id, name, email'
-}
+SOCIAL_AUTH_GOOGLE_PROFILE_EXTRA_PARAMS = {'fields': 'id, name, email'}
 
 
 SOCIAL_AUTH_PIPELINE = (
@@ -160,6 +158,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.user.user_details',
 )
 
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -168,7 +167,7 @@ LOGIN_REDIRECT_URL = 'users:main'
 LOGOUT_URL = 'users:logout'
 LOGOUT_REDIRECT_URL = 'users:main'
 
-SOCIAL_AUTH_FACEBOOK_KEY = 324984535938838        # App ID
+SOCIAL_AUTH_FACEBOOK_KEY = 324984535938838  # App ID
 SOCIAL_AUTH_FACEBOOK_SECRET = '749f0b4cc9450a57bf6359d813fc0cb1'  # App Secret
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '1047909475276-ka6edl55nnj9gjikv9p476o650hnnbbb\
