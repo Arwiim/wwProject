@@ -11,4 +11,4 @@ class PostForm(forms.ModelForm):
         """Meta difinition"""
 
         model = Post
-        fields = ('user', 'title', 'image_header', 'post', 'is_draft', 'categories')
+        fields = ('title', 'image_header', 'post', 'is_draft', 'categories')

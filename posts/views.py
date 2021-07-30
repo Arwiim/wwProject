@@ -1,5 +1,6 @@
 """Views for the post
 """
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView
 from django.urls import reverse_lazy
 from .models import Post
@@ -16,7 +17,7 @@ class PostListViews(ListView):
     template_name = 'posts/lists_posts.html'
 
 
-class PostCreateView(CreateView):
+class PostCreateView(LoginRequiredMixin, CreateView):
     """Create View"""
 
     model = Post
@@ -26,6 +27,5 @@ class PostCreateView(CreateView):
 
     def form_valid(self, form):
         """Form Valid"""
-        post = form
-        post.save()
+        form.instance.user = self.request.user
         return super().form_valid(form)
