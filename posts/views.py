@@ -1,7 +1,7 @@
 """Views for the post
 """
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, CreateView, DetailView, FormView
+from django.views.generic import CreateView, DetailView, ListView, UpdateView
 from django.urls import reverse_lazy
 from .models import Post
 from .forms import PostForm
@@ -44,7 +44,9 @@ class DetailPostView(LoginRequiredMixin, DetailView):
     #     return context
 
 
-class EditPostView(LoginRequiredMixin, FormView):
+class EditPostView(LoginRequiredMixin, UpdateView):
 
     model = Post
     template_name = 'posts/edit_post.html'
+    form_class = PostForm
+    success_url = reverse_lazy('posts:lists_posts')
