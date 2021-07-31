@@ -1,7 +1,7 @@
 """Views for the post
 """
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, DetailView, FormView
 from django.urls import reverse_lazy
 from .models import Post
 from .forms import PostForm
@@ -29,3 +29,22 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         """Form Valid"""
         form.instance.user = self.request.user
         return super().form_valid(form)
+
+
+class DetailPostView(LoginRequiredMixin, DetailView):
+
+    model = Post
+    template_name = 'posts/detail_post.html'
+    context_object_name = 'post'
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['now'] = timezone.now()
+    #     print(context['now'])
+    #     return context
+
+
+class EditPostView(LoginRequiredMixin, FormView):
+
+    model = Post
+    template_name = 'posts/edit_post.html'

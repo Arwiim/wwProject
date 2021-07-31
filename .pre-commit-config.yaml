@@ -30,4 +30,4 @@ repos:
     hooks:
       - id: pylint
         args:
-        - --disable=W0403,F0401,W0614,R0903,C0103
+        - --disable=W0403,F0401,W0614,R0903,C0103,C0114,C0116,C0115
