@@ -31,7 +31,7 @@ class Post(models.Model):
     categories = models.ManyToManyField(Category)
 
     def __str__(self) -> str:
-        return f"{self.user.username} {self.title}"
+        return f" Author: {self.user.username} Title: {self.title}"
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)

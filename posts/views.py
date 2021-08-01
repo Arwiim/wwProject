@@ -16,6 +16,11 @@ class PostListViews(ListView):
     context_object_name = 'posts'
     template_name = 'posts/lists_posts.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['first'] = Post.objects.first()
+        return context
+
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     """Create View"""
