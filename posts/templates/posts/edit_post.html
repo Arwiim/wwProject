@@ -1,68 +1,62 @@
 {% extends "base.html" %}
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.media }}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
-</form>
-
-
-
-
 {% block content %}
 <div class="row justify-content-left mt-5">
-    <div class="col-md-5">
-       <h2>Edit Post!</h2>
-    </div>
- </div>
+   <div class="col-md-5">
+      <h2>Edit Post!</h2>
+   </div>
+</div>
 <div class="row justify-content-left mt-5">
-    <div class="col-md-5">
-       {% if messages %}
-       <div class="alert alert-danger" role="alert">
-          {% for message in messages %}
-          <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-          {% endfor %}
-       </div>
-       {% endif %}
-       <form method="POST" enctype="multipart/form-data">
-          {% csrf_token %}
-          <div class="form-group">
-             <label for="Title">Title</label>
-             <input type="text" name="title" class="form-control" value="{{ form.title.value }}" id="title" required
-                oninvalid="this.setCustomValidity('Title')"
-                oninput="this.setCustomValidity('')"/>
-          </div>
-          <div class="form-group">
-             <label for="last_name">Body</label>
-             <textarea name="post" id="post" cols="60" rows="10">{{ form.post.value }}</textarea>
-          </div>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" name="email" class="form-control" value="{% if request.user.email %}{{ user_form.email.value }}{% endif %}" id="email" required
-               oninvalid="this.setCustomValidity('Enter Email Here')"
-               oninput="this.setCustomValidity('')"/>
+   <div class="col-md-5">
+      {% if messages %}
+      <div class="alert alert-danger" role="alert">
+         {% for message in messages %}
+         <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
+      </div>
+      {% endif %}
+      <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+         <div class="form-group">
+            <label for="Title">Title</label>
+            <input type="text" name="title" class="form-control" value="{{ form.title.value }}" id="title" required
+               oninvalid="this.setCustomValidity('Title')" oninput="this.setCustomValidity('')" />
          </div>
          <div class="form-group">
-            <label for="website">Website</label>
-            <input type="text" name="website" class="form-control" value="{% if request.user.profile.website %}{{ profile_form.website.value }}{% endif %}" id="website">
+            <label for="post">Body</label>
+            {{ form.post }}
+            {{ form.media }}
+         </div>
+         <div class="form-group">
+            <label for="is_draft">Is Draft</label>
+            <input type="checkbox" name="is_draft" checked="{{ form.is_draft.value }}" id="is_draft">
+         </div>
+         <div class="form-group">
+            <label for="categories">Categories</label>
+            <select name="categories" id="categories">
+               {% for catego in form.categories%}
+               <p>{{ catego }}</p>
+               {% endfor %}
+            </select>
          </div>
          <div class="form-group">
             <label for="date_of_birth">Date of birth</label>
-            <input type="text" name="date_of_birth" class="form-control" value="{% if request.user.profile.date_of_birth %}{{ profile_form.date_of_birth.value }}{% endif %}" id="date_of_birth">
+            <input type="text" name="date_of_birth" class="form-control"
+               value="{% if request.user.profile.date_of_birth %}{{ profile_form.date_of_birth.value }}{% endif %}"
+               id="date_of_birth">
          </div>
          <div class="form-group">
             <label for="photo">Photo</label>
             {% if request.user.profile.photo %}
             <a href="{{ request.user.profile.photo.url }}">{{ request.user.profile.photo.url }}</a>
             {% else %}
-            <input type="file" name="photo" class="form-control" value="{% if request.user.profile.photo %}{{ profile_form.photo.value }}{% endif %}" id="photo">
+            <input type="file" name="photo" class="form-control"
+               value="{% if request.user.profile.photo %}{{ profile_form.photo.value }}{% endif %}" id="photo">
             {% endif %}
          </div>
-          <br>
-          <button type="submit" class="btn btn-primary">Login</button>
-       </form>
-    </div>
+         <br>
+         <button type="submit" class="btn btn-primary">Login</button>
+      </form>
+   </div>
 </div>
 
 {% endblock content %}
-
