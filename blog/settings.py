@@ -11,11 +11,16 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 
-from pathlib import Path
+# from pathlib import Path
+# from core.users.models import User
+from pathlib import Path as Path2
 import os
+from unipath import Path
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).ancestor(2)
+BASE_DIR2 = Path2(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -29,7 +34,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['mysite.com', 'localhost', '127.0.0.1']
 
-AUTH_USER_MODEL = 'users.User'
 
 # Application definition
 
@@ -40,13 +44,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'main',
-    'posts',
-    'users',
+    # local apps
+    'core.main',
+    'core.posts',
+    'core.users',
     # third apps
     'ckeditor',
     'social_django',
 ]
+
+AUTH_USER_MODEL = 'users.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -63,7 +70,7 @@ ROOT_URLCONF = 'blog.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR.child('templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -85,7 +92,7 @@ WSGI_APPLICATION = 'blog.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR2 / 'db.sqlite3',
     }
 }
 
@@ -151,7 +158,7 @@ SOCIAL_AUTH_PIPELINE = (
     # YOUR CUSTOM PIPELINE FUNCTION HERE.  I CREATED A FILE/MODULE
     # NAMED pipeline.py AND STUCK IT IN THERE.  MAKE SURE TO PUT THIS
     # AFTER CREATE USER.
-    'users.pipeline.cleanup_social_account',
+    'core.users.pipeline.cleanup_social_account',
     #
     'social_core.pipeline.social_auth.associate_user',
     'social_core.pipeline.social_auth.load_extra_data',
@@ -170,8 +177,7 @@ LOGOUT_REDIRECT_URL = 'users:main'
 SOCIAL_AUTH_FACEBOOK_KEY = 324984535938838  # App ID
 SOCIAL_AUTH_FACEBOOK_SECRET = '749f0b4cc9450a57bf6359d813fc0cb1'  # App Secret
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '1047909475276-ka6edl55nnj9gjikv9p476o650hnnbbb\
-    .apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '1047909475276-ka6edl55nnj9gjikv9p476o650hnnbbb.apps.googleusercontent.com'  # fmt:off
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'IhGU-Oaz9caIaPKq_gwxo02c'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -184,5 +190,5 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'social_core.backends.facebook.FacebookOAuth2',
     'social_core.backends.google.GoogleOAuth2',
-    'users.authentication.EmailAuthBackend',
+    'core.users.authentication.EmailAuthBackend',
 ]
