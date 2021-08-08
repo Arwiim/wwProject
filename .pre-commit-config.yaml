@@ -8,26 +8,30 @@ repos:
       - id: check-json
       - id: check-added-large-files
 
+  - repo: https://github.com/ambv/black
+    rev: 21.7b0
+    hooks:
+      - id: black
+        exclude: ^.*\b(migrations)\b.*$
+        args:
+        - --skip-string-normalization
+        - --line-length=120
+
   - repo: https://github.com/myint/autoflake
     rev: v1.4
     hooks:
       - id: autoflake
+        exclude: ^.*\b(migrations)\b.*$
         args:
         - --in-place
         - --remove-unused-variables
         - --remove-all-unused-imports
 
-  - repo: https://github.com/ambv/black
-    rev: 21.7b0
-    hooks:
-      - id: black
-        args:
-        - --skip-string-normalization
-        - --line-length=100
-
   - repo: https://github.com/pycqa/pylint
     rev: v2.9.5
     hooks:
       - id: pylint
+        exclude: ^.*\b(migrations)\b.*$
         args:
-        - --disable=W0403,F0401,W0614,R0903,C0103,C0114,C0116,C0115
+        - --max-line-length=120
+        - --disable=W0403,F0401,W0614,R0903,C0103,C0114,C0116,C0115,R1725,W0703,W0613,R0201,W1113

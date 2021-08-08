@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-left mt-5">
+   <div class="col-md-5">
+      <h2>Edit Post!</h2>
+   </div>
+</div>
+<div class="row justify-content-left mt-5">
+   <div class="col-md-5">
+      {% if messages %}
+      <div class="alert alert-danger" role="alert">
+         {% for message in messages %}
+         <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
+      </div>
+      {% endif %}
+      <form method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+         <div class="form-group">
+            <label for="Title">Title</label>
+            <input type="text" name="title" class="form-control" value="{{ form.title.value }}" id="title" required
+               oninvalid="this.setCustomValidity('Title')" oninput="this.setCustomValidity('')" />
+         </div>
+         <div class="form-group">
+            <label for="post">Body</label>
+            {{ form.post }}
+            {{ form.media }}
+         </div>
+         <div class="form-group">
+            <label for="is_draft">Is Draft</label>
+            <input type="checkbox" name="is_draft" checked="{{ form.is_draft.value }}" id="is_draft">
+         </div>
+         <div class="form-group">
+            <label for="categories">Categories</label>
+            <select name="categories" id="categories">
+               {% for catego in form.categories%}
+               <p>{{ catego }}</p>
+               {% endfor %}
+            </select>
+         </div>
+         <div class="form-group">
+            <label for="photo">Image Header</label>
+            {% if "{{ post.image_header }}" %}
+               hay image
+               <input type="file" name="image_header" class="form-control"
+               value="{{ form.image_header.value }}" id="image_header">
+            {% else %}
+               <input type="file" name="image_header" class="form-control"
+               value="ostia" id="image_header">
+            {% endif %}
+         </div>
+         <br>
+         <button type="submit" class="btn btn-primary">Login</button>
+      </form>
+   </div>
+</div>
+
+{% endblock content %}
