@@ -24,4 +24,4 @@ class User(AbstractUser):
     is_verified = models.BooleanField(default=False)
 
     def __str__(self) -> str:
-        return self.email + self.username
+        return f"{self.email}  Username: {self.username}"

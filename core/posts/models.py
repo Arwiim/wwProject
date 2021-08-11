@@ -20,7 +20,6 @@ class Post(models.Model):
     """Post model"""
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
-
     title = models.CharField(max_length=255, unique=True)
     image_header = models.ImageField(upload_to='posts/photos')
     post = RichTextField()
@@ -39,6 +38,13 @@ class Post(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         super().save(*args, **kwargs)
+
+
+class Favorites(models.Model):
+    """Favorites model"""
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='user_favorites', on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, related_name='post_favorites', on_delete=models.CASCADE)
 
 
 class Comment(models.Model):

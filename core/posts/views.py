@@ -1,9 +1,12 @@
 """Views for the post
 """
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http.response import HttpResponseRedirect
+from django.urls.base import reverse
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 from django.urls import reverse_lazy
-from .models import Post
+from django.views.generic.base import View
+from .models import Post, Favorites
 from .forms import PostForm
 
 # Create your views here.
@@ -71,3 +74,15 @@ class Search(ListView):
         context = super().get_context_data(**kwargs)
         context['kword'] = self.request.GET.get('kword', '')
         return context
+
+
+# Favorites View
+class AddFavorites(View):
+    def post(self, request, *arg, **kwargs):
+        # User
+        user = self.request.user
+        post = Post.objects.get(id=self.kwargs['pk'])
+        #
+        Favorites.objects.create(user=user, post=post)
+
+        return HttpResponseRedirect(reverse('/'))
