@@ -2,8 +2,7 @@ from django.contrib.sites import requests
 from django.shortcuts import render
 from pynytimes import NYTAPI
 from blog.settings import NYC_KEY
-from django.views.generic import CreateView, DetailView, ListView, UpdateView
-
+import requests as rq
 # Create your views here.
 
 nyt = NYTAPI(NYC_KEY, parse_dates=True)
@@ -31,4 +30,3 @@ def WorldViewList(requests):
     top_world_stories = nyt.top_stories(section="world")[:1]
     return render(requests, 'nycnews/lists_news.html', context={'world': top_world_stories})
     
-

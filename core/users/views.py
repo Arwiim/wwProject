@@ -13,14 +13,15 @@ from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 from core.posts.models import Post
-from .utils import generate_token
+from .utils import generate_token, temperature
 from .models import Profile, User
 from .forms import UserRegistration, ProfileEditForm, UserEditForm, LoginForm
 
 
 def main(request):
     """Main view"""
-    return render(request, 'base.html')
+    temp =  temperature()
+    return render(request, 'base.html', context={'temp':temp})
 
 
 def register(request):
