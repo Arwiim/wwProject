@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # local apps
+    'core.nytnews',
     'core.main',
     'core.posts',
     'core.users',
@@ -192,3 +193,9 @@ AUTHENTICATION_BACKENDS = [
     'social_core.backends.google.GoogleOAuth2',
     'core.users.authentication.EmailAuthBackend',
 ]
+
+# NYC KEYS
+
+NYC_KEY = '8dYoOhVOsOc9ZXyAhucUDmTADX31k8ZY'
+NYC_SECRET = 'be9alPW27Qaqgz6c'
+NYC_APP_ID = ' 83f13f0c-6e3f-4dc2-992f-308c8ab1e033'

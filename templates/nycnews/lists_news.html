@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+
+<body>
+    {% for new in world%}
+        <p>Title</p>
+        <li>{{new.title}}</li>
+        <p>Description</p>
+        <li>{{new.abstract}}</li>
+        <img src="{{new.multimedia.0.url}}" alt="img" width="400">
+        <li>{{new.short_url}}</li>
+    {% endfor %}
+</body>
+
+{% endblock content %}

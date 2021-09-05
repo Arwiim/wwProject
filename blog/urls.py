@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('social-auth/', include('social_django.urls', namespace='social')),
     path('posts/', include('core.posts.urls', namespace='posts')),
+    path('news/', include('core.nytnews.urls', namespace='news')),
     path('', include('core.users.urls', namespace='users')),
 ]
 
