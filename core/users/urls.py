@@ -53,4 +53,9 @@ urlpatterns = [
         name='password_reset_complete',
     ),
     # Social auth
+    path(
+        'add-entrada/<id>',
+        views.add_favorite,
+        name='add-favoritos',
+    ),
 ]

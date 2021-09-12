@@ -14,7 +14,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 from core.posts.models import Post
 from .utils import generate_token, temperature
-from .models import Profile, User
+from .models import Profile, User, Favorites
 from .forms import UserRegistration, ProfileEditForm, UserEditForm, LoginForm
 
 
@@ -83,11 +83,15 @@ def edit_profile(request):
         profile_form = ProfileEditForm(instance=request.user.profile)
 
     post_by_user = Post.objects.filter(user=request.user.id)
+    favorites = Favorites.objects.filter(user_from=request.user.id)
 
     return render(
         request,
         'account/edit_profile.html',
-        {'user_form': user_form, 'profile_form': profile_form, 'posts': post_by_user},
+        {'user_form': user_form,
+         'profile_form': profile_form,
+         'posts': post_by_user,
+         'favorites': favorites},
     )
 
 
@@ -132,3 +136,19 @@ def activate_user(request, uidb64, token):
         return redirect(reverse('users:login'))
 
     return render(request, 'account/activate-failed.html', {"user": user})
+
+
+def add_favorite(request, id):
+    
+    if request.method == 'POST':
+        
+        userf = request.user
+        postf = Post.objects.get(id=id)
+        Favorites.objects.create(
+            user_from=userf,
+            post_fav=postf
+        )
+        
+        return HttpResponseRedirect(
+            reverse('posts:lists_posts')
+        )

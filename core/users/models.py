@@ -3,6 +3,9 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.db.models.deletion import CASCADE
+
+from core.posts.models import Post
 
 
 class Profile(models.Model):
@@ -25,3 +28,14 @@ class User(AbstractUser):
 
     def __str__(self) -> str:
         return f"{self.email}  Username: {self.username}"
+
+
+class Favorites(models.Model):
+    
+    user_from = models.ForeignKey(User, related_name='rel_to_fav', on_delete=models.CASCADE)
+    post_fav = models.ForeignKey(Post, on_delete=models.CASCADE)
+    fav_date = models.DateTimeField(auto_now_add=True ,db_index=True)
+    
+    def __str__(self) -> str:
+        return f"{self.post_fav.title}"
+        

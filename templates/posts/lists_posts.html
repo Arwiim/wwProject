@@ -67,6 +67,9 @@
         <p class="blog-post-meta">{{ post.created }} <a href="#">{{ post.user.username|title }}</a></p>
         {{ post.post|safe|truncatechars:800 }}
         <a href="{% url 'posts:detail_post' post.slug %}">Read More</a>
+        <form class="blog-action" action="{% url 'users:add-favoritos' post.id%}" method="POST">{% csrf_token %}
+          <button type="submit" class="button alert">Agregar a favoritos</button>
+        </form>
       </article>
       {% endfor %}
 
