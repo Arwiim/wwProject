@@ -40,12 +40,6 @@ class Post(models.Model):
         super().save(*args, **kwargs)
 
 
-class Favorites(models.Model):
-    """Favorites model"""
-
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='user_favorites', on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, related_name='post_favorites', on_delete=models.CASCADE)
-
 
 class Comment(models.Model):
     """Comment class"""

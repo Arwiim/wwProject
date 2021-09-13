@@ -1,12 +1,15 @@
 """Views for the post
 """
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import request
+from django.shortcuts import get_object_or_404
 from django.http.response import HttpResponseRedirect
 from django.urls.base import reverse
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 from django.urls import reverse_lazy
 from django.views.generic.base import View
-from .models import Post, Favorites
+from core.users.models import Favorites
+from .models import Post
 from .forms import PostForm
 
 # Create your views here.
@@ -18,10 +21,22 @@ class PostListViews(ListView):
     model = Post
     context_object_name = 'posts'
     template_name = 'posts/lists_posts.html'
+    
 
     def get_context_data(self, **kwargs):
+        favorites_id = []
+        if self.request.user:
+           user = self.request.user
+           try:   
+               favorites = Favorites.objects.filter(user_from=user.id)
+               for fav_id in favorites:
+                   favorites_id.append(fav_id.post_fav.id)
+           except:
+               favorites_id = None
         context = super().get_context_data(**kwargs)
         context['first'] = Post.objects.first()
+        context['fav'] = favorites_id
+        
         return context
 
 
