@@ -27,7 +27,7 @@ class User(AbstractUser):
     is_verified = models.BooleanField(default=False)
 
     def __str__(self) -> str:
-        return f"{self.email}  Username: {self.username}"
+        return f"Username: {self.username}"
 
 
 class Favorites(models.Model):

@@ -21,7 +21,7 @@ class Post(models.Model):
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     title = models.CharField(max_length=255, unique=True)
-    image_header = models.ImageField(upload_to='posts/photos')
+    image_header = models.ImageField(upload_to='posts/photos', blank=True, null=True)
     post = RichTextField()
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)

@@ -11,7 +11,9 @@
       <p class="blog-post-meta">{{ post.created }} <a href="#">{{ post.user.username }}</a></p>
       {{ post.post|safe }}
       <hr>
-      <img src="{{ post.image_header.url }}" alt="img" width="550">
+      {% if post.image_header %}
+        <img src="{{ post.image_header.url }}" alt="img" width="550">
+      {% endif %}
       <p></p>
       <a href="{% url 'posts:edit_post' post.slug%}">Edit Post</a>
     </article>
