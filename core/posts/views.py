@@ -9,11 +9,25 @@ from django.views.generic import CreateView, DetailView, ListView, UpdateView
 from django.urls import reverse_lazy
 from django.views.generic.base import View
 from core.users.models import Favorites
-from .models import Post
+from .models import Post, Category
 from .forms import PostForm
 
 # Create your views here.
 
+class PostByCategory(ListView):
+    
+    model = Post
+    context_object_name = 'posts'
+    template_name = 'posts/post_by_category.html'
+    
+    def get_context_data(self, **kwargs):
+        category = self.kwargs['category']
+        category = Category.objects.get(name=category)
+        context = super().get_context_data(**kwargs)
+        context['category'] = category
+        context['post_by_cat'] = Post.objects.filter(categories=category)
+        return context
+        
 
 class PostListViews(ListView):
     """Post view"""
