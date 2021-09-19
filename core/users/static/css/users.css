@@ -154,3 +154,16 @@ h1, h2, h3, h4, h5, h6 {
 .blog-footer p:last-child {
   margin-bottom: 0;
 }
+
+.comment {
+  padding:10px;
+  background: #efefef;
+}
+.comment:nth-child(even) {
+  background:#f9f9f9;
+}
+.comment .info {
+  font-weight:bold;
+  font-size:12px;
+  color:#666;
+}

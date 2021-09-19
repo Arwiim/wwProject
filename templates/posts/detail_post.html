@@ -2,21 +2,41 @@
 
 {% block content %}
 <div class="col-md-8">
-    <h3 class="pb-4 mb-4 fst-italic border-bottom">
-      From the Firehose
-    </h3>
+  <h3 class="pb-4 mb-4 fst-italic border-bottom">
+    From the Firehose
+  </h3>
 
-    <article class="blog-post">
-      <h2 class="blog-post-title">{{ post.title }}</h2>
-      <p class="blog-post-meta">{{ post.created }} <a href="#">{{ post.user.username }}</a></p>
-      {{ post.post|safe }}
-      <hr>
-      {% if post.image_header %}
-        <img src="{{ post.image_header.url }}" alt="img" width="550">
-      {% endif %}
-      <p></p>
-      <a href="{% url 'posts:edit_post' post.slug%}">Edit Post</a>
-    </article>
+  <article class="blog-post">
+    <h2 class="blog-post-title">{{ post.title }}</h2>
+    <p class="blog-post-meta">{{ post.created }} <a href="#">{{ post.user.username }}</a></p>
+    {{ post.post|safe }}
+    <hr>
+    {% if post.image_header %}
+    <img src="{{ post.image_header.url }}" alt="img" width="550">
+    {% endif %}
+  </article>
+  {% for comment in comments %}
+  <div class="comment">
+    <p class="info">
+      Comment {{ forloop.counter }} by {{ comment.name }}
+      {{ comment.created }}
+    </p>
+    {{ comment.body|linebreaks }}
   </div>
-{% endblock %}
+  {% empty %}
+  <p>There are no comments yet.</p>
+  {% endfor %}
+  <!--End Comments show section-->
+  {% if new_comment %}
+  <h2>Your comment has been added.</h2>
+  {% else %}
+  <h2>Add a new comment</h2>
+  <form method="post">
+    {{ comment_form.as_p }}
+    {% csrf_token %}
+    <p><input type="submit" value="Add comment"></p>
+  </form>
+  {% endif %}
+</div>
 
+{% endblock %}

@@ -40,14 +40,15 @@ class Post(models.Model):
         super().save(*args, **kwargs)
 
 
-
 class Comment(models.Model):
     """Comment class"""
 
-    # user = models.ForeignKey(User, on_delete=models.PROTECT)
-    # profile = models.ForeignKey('users.Profile', on_delete=models.PROTECT)
-    post = models.ForeignKey(Post, on_delete=models.PROTECT)
-    comment = models.CharField(max_length=5000)
+    post = models.ForeignKey(Post, on_delete=models.PROTECT, related_name='comments')
+    body = models.CharField(max_length=4000)
+    name = models.CharField(max_length=80, default='Anonymous')
+    email = models.EmailField(null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
-        return self.comment
+        return self.body
