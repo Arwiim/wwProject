@@ -8,9 +8,10 @@ from django.urls.base import reverse
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView
 from django.views.generic.base import View
+from django.views.generic.edit import FormView
 from core.users.models import Favorites
 from .models import Category, Post
-from .forms import PostForm, CommentForm
+from .forms import PostForm, CommentForm, EmailPostForm
 
 # Create your views here.
 
@@ -76,7 +77,8 @@ class DetailPostView(View):
     comment_form = CommentForm
 
     def get(self, request, *args, **kwargs):
-        """[summary]
+        """Get a especific Post
+        And the comment regards on the post
 
         Args:
             request ([type]): [description]
@@ -95,13 +97,14 @@ class DetailPostView(View):
         )
 
     def post(self, request, *args, **kwargs):
-        """[summary]
+        """Send Comment to the post
 
         Args:
-            request ([type]): [description]
+            request (request): request to send. (POST)
 
         Returns:
-            [type]: [description]
+            URL: Redirect to the post if succes
+            otherwise return the form
         """
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
@@ -148,3 +151,23 @@ class AddFavorites(View):
         Favorites.objects.create(user=user, post=post)
 
         return HttpResponseRedirect(reverse('/'))
+
+
+class SendPost(FormView):
+
+    template_name = 'posts/send_email.html'
+    form_class = EmailPostForm
+    success_url = '/'
+
+    def form_valid(self, form):
+        """[summary]
+
+        Args:
+            form ([type]): [description]
+
+        Returns:
+            [type]: [description]
+        """
+        post_id = get_object_or_404(Post, id=self.kwargs['post_id'], is_draft='False')
+        form.send_email(post_id)
+        return super().form_valid(form)
