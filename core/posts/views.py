@@ -157,17 +157,34 @@ class SendPost(FormView):
 
     template_name = 'posts/send_email.html'
     form_class = EmailPostForm
-    success_url = '/'
+    sent = False
 
-    def form_valid(self, form):
-        """[summary]
+    def get(self, request, *args, **kwargs):
+        post = get_object_or_404(Post, slug=self.kwargs['slug'])
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        context = self.get_context_data(**kwargs)
+        context['form'] = form
+        context['post'] = post
+        return self.render_to_response(context)
 
-        Args:
-            form ([type]): [description]
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        if form.is_valid():
+            return self.form_valid(form)
+        return self.form_invalid(form, **kwargs)
 
-        Returns:
-            [type]: [description]
-        """
-        post_id = get_object_or_404(Post, id=self.kwargs['post_id'], is_draft='False')
-        form.send_email(post_id)
-        return super().form_valid(form)
+    def form_invalid(self, form, **kwargs):
+        context = self.get_context_data(**kwargs)
+        context['form'] = form
+        return self.render_to_response(context)
+
+    def form_valid(self, form, **kwargs):
+        post = get_object_or_404(Post, slug=self.kwargs['slug'], is_draft='False')
+        form.send_email(post)
+        context = self.get_context_data(**kwargs)
+        context['form'] = form
+        self.sent = True
+        context['sent'] = self.sent
+        return self.render_to_response(context)

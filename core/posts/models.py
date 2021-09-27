@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from django.conf import settings
+from django.urls.base import reverse
 from ckeditor.fields import RichTextField
 from .managers import PostsManager
 
@@ -29,6 +30,9 @@ class Post(models.Model):
     slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
     views = models.PositiveIntegerField(default=0)
     categories = models.ManyToManyField(Category)
+
+    def get_absolute_url(self):
+        return reverse("posts:detail_post", kwargs={"slug": self.slug})
 
     objects = PostsManager()
 
